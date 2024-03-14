@@ -1,0 +1,4 @@
+E > E+B|a
+W > W*A|C
+O > O*a|x
+C >id

@@ -1,0 +1,7 @@
+E > aE'
+E' > +BE' | e
+W > CW'
+W' > *AW' | e
+O > xO'
+O' > *aO' | e
+C > id

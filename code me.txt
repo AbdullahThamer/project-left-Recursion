@@ -1,0 +1,68 @@
+def process_file():
+    def custom_split(string, delimiter):
+        result = ['']
+        word_index = 0
+        for char in string:
+            if char == delimiter:
+                result += ['']
+                word_index += 1
+            else:
+                result[word_index] += char
+        return result
+
+    def custom_replace(string, old, new):
+        result = ''
+        i = 0
+        while i < len(string):
+            if string[i:i+len(old)] == old:
+                result += new
+                i += len(old)
+            else:
+                result += string[i]
+                i += 1
+        return result
+
+    def rightP(map):
+        for i in map.keys():
+            j = map[i]
+            j = custom_replace(j, ' ', '')
+            j = custom_replace(j, '\t', '')
+            map[i] = list(filter(None, custom_split(j, '|')))
+        return map
+
+    def leftP(map):
+        nr = {}
+        for A in map.keys():
+            direct_recursion = [alpha for alpha in map[A] if alpha[0] == A]
+            no_recursion = [alpha for alpha in map[A] if alpha[0] != A]
+            if direct_recursion:
+                A_prime = A + "'"
+                nr[A] = [alpha + A_prime for alpha in no_recursion] if no_recursion else ["e"]
+                nr[A_prime] = [alpha[1:] + A_prime for alpha in direct_recursion] + ["e"]
+            else:
+                nr[A] = map[A]
+        return nr
+
+    with open("input.txt") as f:
+        map1 = {}
+        for c in f:
+            c = custom_replace(c, '\n', '')
+            x = custom_split(c, '>')
+            x[0] = custom_replace(x[0], ' ', '')
+            x[0] = custom_replace(x[0], '\t', '')
+            map1[x[0]] = x[1]
+
+    r = rightP(map1)
+    e = leftP(r)
+
+    with open("output.txt", "w") as f:
+        for i in e.keys():
+            j = e[i]
+            f.write(i + ' > ')
+            for a in j:
+                f.write(a)
+                if a != j[-1]:
+                    f.write(' | ')
+            f.write('\n')
+
+process_file()
